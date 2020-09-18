@@ -32,13 +32,17 @@ func authUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 func fooUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	fmt.Println("foo")
 	newctx := context.WithValue(ctx, "foo_key", "foo_value")
-	return handler(newctx, req)
+	rsp, err := handler(newctx, req)
+	fmt.Printf("after foo,rsp=%v,err=%v\n", rsp, err)
+	return rsp, err
 }
 
 func barUnaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	fmt.Println("bar")
 	newctx := context.WithValue(ctx, "bar_key", "bar_value")
-	return handler(newctx, req)
+	rsp, err := handler(newctx, req)
+	fmt.Printf("after bar,rsp=%v,err=%v\n", rsp, err)
+	return rsp, err
 }
 
 type helloService struct{}
